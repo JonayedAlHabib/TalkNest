@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import axiosInstance from '../utils/axios'
 import useAuthStore from '../store/authStore'
 import PostCard from '../components/feed/PostCard'
+import EditProfileModal from '../components/profile/EditProfileModal'
 
 function ProfilePage() {
   const { username } = useParams()
@@ -14,6 +15,7 @@ function ProfilePage() {
   const [loading, setLoading] = useState(true)
   const [followLoading, setFollowLoading] = useState(false)
   const [followStatus, setFollowStatus] = useState(null)
+  const [showEditModal, setShowEditModal] = useState(false)
 
   const isOwnProfile = authUser?.username === username
 
@@ -139,12 +141,24 @@ function ProfilePage() {
 
         {/* Buttons */}
         {isOwnProfile ? (
-          <button className="w-full border border-gray-300 text-gray-700 text-sm py-2 rounded-full hover:bg-gray-50 transition">
-            Edit Profile
-          </button>
+          <>
+            <button
+              onClick={() => setShowEditModal(true)}
+              className="w-full border border-gray-300 text-gray-700 text-sm py-2 rounded-full hover:bg-gray-50 transition"
+            >
+              Edit Profile
+            </button>
+
+            {showEditModal && (
+              <EditProfileModal
+                profile={profile}
+                onClose={() => setShowEditModal(false)}
+                onUpdate={fetchProfile}
+              />
+            )}
+          </>
         ) : (
           <div className="flex gap-2">
-            {/* Follow Button */}
             <button
               onClick={handleFollow}
               disabled={followLoading || followStatus === 'pending'}
@@ -163,7 +177,6 @@ function ProfilePage() {
               }
             </button>
 
-            {/* Message Button */}
             <button
               onClick={handleMessage}
               className="flex-1 border border-gray-300 text-gray-700 text-sm py-2 rounded-full hover:bg-gray-50 transition"

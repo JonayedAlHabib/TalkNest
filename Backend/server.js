@@ -3,6 +3,10 @@ const dotenv = require('dotenv')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const http = require('http')
+
+// ⚡ Load environment variables FIRST
+dotenv.config()
+
 const connectDB = require('./config/db')
 const { initSocket } = require('./socket/socket')
 
@@ -15,7 +19,6 @@ const commentRoutes = require('./routes/commentRoutes')
 const interactionRoutes = require('./routes/interactionRoutes')
 const messageRoutes = require('./routes/messageRoutes')
 
-dotenv.config()
 connectDB()
 
 const app = express()
@@ -24,8 +27,8 @@ const server = http.createServer(app)
 // Socket.io initialize
 initSocket(server)
 
-app.use(express.json({ limit: '10mb' }))
-app.use(express.urlencoded({ extended: true }))
+app.use(express.json({ limit: '50mb' }))
+app.use(express.urlencoded({ limit: '50mb', extended: true }))
 app.use(cookieParser())
 app.use(cors({
   origin: 'http://localhost:5173',

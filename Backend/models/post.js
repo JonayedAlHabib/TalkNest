@@ -3,8 +3,9 @@ const mongoose = require('mongoose')
 const postSchema = new mongoose.Schema({
     content: {
         type: String,
-        required: true,
-        trim: true
+        required: false,
+        trim: true,
+        default: ''
     },
     image: {
         type: String,

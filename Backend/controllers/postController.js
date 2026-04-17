@@ -2,27 +2,25 @@ const Post = require('../models/post')
 const cloudinary = require('../config/cloudinary')
 const User = require('../models/User')
 
-
 // Create post
-const createPost = async (req, res) =>{
-    try {
+const createPost = async (req, res) => {
+  try {
     const { content, image } = req.body
-    
-    if (!content || content.trim() === "") {
-      return res.status(400).json({ message: "Content is required" })
+
+    if ((!content || content.trim() === '') && !image) {
+      return res.status(400).json({ message: 'Content or image is required' })
     }
 
-    let imageUrl = ""
-    
-    if (image && image.startsWith("data:image")) {
+    let imageUrl = ''
+    if (image && image.startsWith('data:image')) {
       const uploaded = await cloudinary.uploader.upload(image, {
-        folder: "talknest/posts"
+        folder: 'talknest/posts'
       })
       imageUrl = uploaded.secure_url
     }
 
     const post = await Post.create({
-      content,
+      content: content || '',
       image: imageUrl,
       author: req.user._id
     })
@@ -30,17 +28,18 @@ const createPost = async (req, res) =>{
     await post.populate('author', 'fullName username profilePicture')
 
     res.status(201).json({
-      message: "Post created successfully",
+      message: 'Post created successfully',
       post
     })
   } catch (error) {
+    console.error('Create post error:', error)
     res.status(500).json({ message: error.message })
   }
 }
 
-// Get All Post
-const getAllPost = async (req, res) =>{
-    try {
+// Get All Posts
+const getAllPost = async (req, res) => {
+  try {
     const { page = 1, limit = 10 } = req.query
     const skip = (page - 1) * limit
 
@@ -64,9 +63,9 @@ const getAllPost = async (req, res) =>{
   }
 }
 
-// Get User Post
-const getUserPosts = async (req, res) =>{
-    try {
+// Get User Posts
+const getUserPosts = async (req, res) => {
+  try {
     const { userId } = req.params
     const { page = 1, limit = 10 } = req.query
     const skip = (page - 1) * limit
@@ -84,9 +83,9 @@ const getUserPosts = async (req, res) =>{
   }
 }
 
-// Get Post
-const getPost = async (req, res) =>{
-    try {
+// Get Single Post
+const getPost = async (req, res) => {
+  try {
     const { postId } = req.params
 
     const post = await Post.findById(postId)
@@ -94,7 +93,7 @@ const getPost = async (req, res) =>{
       .populate('comments')
 
     if (!post) {
-      return res.status(404).json({ message: "Post not found" })
+      return res.status(404).json({ message: 'Post not found' })
     }
 
     res.json(post)
@@ -104,28 +103,28 @@ const getPost = async (req, res) =>{
 }
 
 // Edit Post
-const editPost = async (req, res) =>{
-    try {
+const editPost = async (req, res) => {
+  try {
     const { postId } = req.params
     const { content, image } = req.body
 
     const post = await Post.findById(postId)
-    
+
     if (!post) {
-      return res.status(404).json({ message: "Post not found" })
+      return res.status(404).json({ message: 'Post not found' })
     }
 
     if (post.author.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: "Not authorized to edit this post" })
+      return res.status(403).json({ message: 'Not authorized to edit this post' })
     }
 
-    if (content) {
+    if (content !== undefined) {
       post.content = content
     }
 
-    if (image && image.startsWith("data:image")) {
+    if (image && image.startsWith('data:image')) {
       const uploaded = await cloudinary.uploader.upload(image, {
-        folder: "talknest/posts"
+        folder: 'talknest/posts'
       })
       post.image = uploaded.secure_url
     }
@@ -134,7 +133,7 @@ const editPost = async (req, res) =>{
     await updatedPost.populate('author', 'fullName username profilePicture')
 
     res.json({
-      message: "Post updated successfully",
+      message: 'Post updated successfully',
       post: updatedPost
     })
   } catch (error) {
@@ -143,37 +142,37 @@ const editPost = async (req, res) =>{
 }
 
 // Delete Post
-const deletePost = async (req, res) =>{
-    try {
+const deletePost = async (req, res) => {
+  try {
     const { postId } = req.params
 
     const post = await Post.findById(postId)
 
     if (!post) {
-      return res.status(404).json({ message: "Post not found" })
+      return res.status(404).json({ message: 'Post not found' })
     }
 
     if (post.author.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: "Not authorized to delete this post" })
+      return res.status(403).json({ message: 'Not authorized to delete this post' })
     }
 
     await Post.findByIdAndDelete(postId)
 
-    res.json({ message: "Post deleted successfully" })
+    res.json({ message: 'Post deleted successfully' })
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
 }
 
 // Like Post
-const likePost = async (req, res) =>{
-    try {
+const likePost = async (req, res) => {
+  try {
     const { postId } = req.params
 
     const post = await Post.findById(postId)
 
     if (!post) {
-      return res.status(404).json({ message: "Post not found" })
+      return res.status(404).json({ message: 'Post not found' })
     }
 
     const alreadyLiked = post.likes.includes(req.user._id)
@@ -183,27 +182,27 @@ const likePost = async (req, res) =>{
         userId => userId.toString() !== req.user._id.toString()
       )
       await post.save()
-      return res.json({ message: "Post unliked", post })
+      return res.json({ message: 'Post unliked', post })
     }
 
     post.likes.push(req.user._id)
     await post.save()
 
-    res.json({ message: "Post liked", post })
+    res.json({ message: 'Post liked', post })
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
 }
 
-// Unlike Post 
-const unlikePost = async (req, res) =>{
-    try {
+// Unlike Post
+const unlikePost = async (req, res) => {
+  try {
     const { postId } = req.params
 
     const post = await Post.findById(postId)
 
     if (!post) {
-      return res.status(404).json({ message: "Post not found" })
+      return res.status(404).json({ message: 'Post not found' })
     }
 
     post.likes = post.likes.filter(
@@ -211,22 +210,22 @@ const unlikePost = async (req, res) =>{
     )
     await post.save()
 
-    res.json({ message: "Post unliked", post })
+    res.json({ message: 'Post unliked', post })
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
 }
 
 // Get Post Likes
-const getPostLikes = async (req, res) =>{
-    try {
+const getPostLikes = async (req, res) => {
+  try {
     const { postId } = req.params
 
     const post = await Post.findById(postId)
       .populate('likes', 'fullName username profilePicture')
 
     if (!post) {
-      return res.status(404).json({ message: "Post not found" })
+      return res.status(404).json({ message: 'Post not found' })
     }
 
     res.json({
@@ -238,13 +237,10 @@ const getPostLikes = async (req, res) =>{
   }
 }
 
-
-// GET FEED 
+// Get Feed
 const getFeed = async (req, res) => {
   try {
     const currentUser = await User.findById(req.user._id)
-
-    // আমি যাদের follow করি + আমার নিজের posts
     const feedUsers = [...currentUser.following, req.user._id]
 
     const { page = 1, limit = 10 } = req.query
@@ -264,14 +260,14 @@ const getFeed = async (req, res) => {
 }
 
 module.exports = {
-    createPost,
-    getAllPost,
-    getUserPosts,
-    getPost,
-    editPost,
-    deletePost,
-    likePost,
-    unlikePost,
-    getPostLikes,
-    getFeed
+  createPost,
+  getAllPost,
+  getUserPosts,
+  getPost,
+  editPost,
+  deletePost,
+  likePost,
+  unlikePost,
+  getPostLikes,
+  getFeed
 }
