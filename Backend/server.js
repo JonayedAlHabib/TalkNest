@@ -33,7 +33,8 @@ const allowedOrigins = [
   process.env.CLIENT_URL,
   process.env.FRONTEND_URL,
   'http://localhost:5173',
-  'http://127.0.0.1:5173'
+  'http://127.0.0.1:5173',
+  'https://talk-nest-psi.vercel.app/'
 ].filter(Boolean)
 
 app.use(express.json({ limit: '50mb' }))
