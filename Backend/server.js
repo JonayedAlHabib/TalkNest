@@ -19,7 +19,9 @@ const commentRoutes = require('./routes/commentRoutes')
 const interactionRoutes = require('./routes/interactionRoutes')
 const messageRoutes = require('./routes/messageRoutes')
 
-connectDB()
+connectDB().catch((err) => {
+  console.error('Database initialization failed:', err.message)
+})
 
 const app = express()
 const server = http.createServer(app)
