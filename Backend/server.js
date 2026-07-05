@@ -29,11 +29,18 @@ const server = http.createServer(app)
 // Socket.io initialize
 initSocket(server)
 
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  process.env.FRONTEND_URL,
+  'http://localhost:5173',
+  'http://127.0.0.1:5173'
+].filter(Boolean)
+
 app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ limit: '50mb', extended: true }))
 app.use(cookieParser())
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: allowedOrigins,
   credentials: true
 }))
 
@@ -47,6 +54,6 @@ app.use('/api/interactions', interactionRoutes)
 app.use('/api/messages', messageRoutes)
 
 const PORT = process.env.PORT || 5000
-server.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`)
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`)
 })
