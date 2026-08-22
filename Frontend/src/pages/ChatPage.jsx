@@ -3,6 +3,8 @@ import { io } from 'socket.io-client'
 import axiosInstance from '../utils/axios'
 import useAuthStore from '../store/authStore'
 
+const SOCKET_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+
 function ChatPage() {
   const { authUser } = useAuthStore()
   const [conversations, setConversations] = useState([])
@@ -18,8 +20,9 @@ function ChatPage() {
   useEffect(() => {
     if (!authUser) return
 
-    socketRef.current = io('http://localhost:5000', {
-      query: { userId: authUser._id }
+    socketRef.current = io(SOCKET_URL, {
+      query: { userId: authUser._id },
+      withCredentials: true
     })
 
     // Online users list
