@@ -18,7 +18,7 @@ const messageSchema = new mongoose.Schema({
     },
     text: {
         type: String,
-        required: true
+        default: ""
     },
     image: {
         type: String,
@@ -29,5 +29,12 @@ const messageSchema = new mongoose.Schema({
         default: false
     }
 }, { timestamps: true })
+
+messageSchema.pre('validate', function (next) {
+    if (!this.text && !this.image) {
+        return next(new Error('Message must have text or image'))
+    }
+    next()
+})
 
 module.exports = mongoose.model('Message', messageSchema)

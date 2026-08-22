@@ -9,10 +9,10 @@ const getReceiverSocketId = (receiverId) => {
 
 const getIO = () => io
 
-const initSocket = (server) => {
+const initSocket = (server, allowedOrigins = []) => {
   io = new Server(server, {
     cors: {
-      origin: 'http://localhost:5173',
+      origin: allowedOrigins.length ? allowedOrigins : 'http://localhost:5173',
       credentials: true
     }
   })
