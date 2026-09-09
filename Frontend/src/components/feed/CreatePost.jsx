@@ -1,11 +1,12 @@
 import { useState, useRef } from 'react'
 import useAuthStore from '../../store/authStore'
 import axiosInstance from '../../utils/axios'
+import { uploadToCloudinary } from '../../utils/uploadImage'
 
 function CreatePost({ onPostCreated }) {
   const { authUser } = useAuthStore()
   const [content, setContent] = useState('')
-  const [image, setImage] = useState(null)
+  const [imageFile, setImageFile] = useState(null)
   const [imagePreview, setImagePreview] = useState(null)
   const [loading, setLoading] = useState(false)
   const fileInputRef = useRef(null)
@@ -20,16 +21,12 @@ function CreatePost({ onPostCreated }) {
       return
     }
 
-    const reader = new FileReader()
-    reader.onloadend = () => {
-      setImage(reader.result)        // base64 → Cloudinary তে যাবে
-      setImagePreview(reader.result) // preview দেখাবে
-    }
-    reader.readAsDataURL(file)
+    setImageFile(file)
+    setImagePreview(URL.createObjectURL(file))
   }
 
   const removeImage = () => {
-    setImage(null)
+    setImageFile(null)
     setImagePreview(null)
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
@@ -37,29 +34,34 @@ function CreatePost({ onPostCreated }) {
   }
 
   const handleSubmit = async () => {
-    if (!content.trim() && !image) return
+    if (!content.trim() && !imageFile) return
     setLoading(true)
     try {
-      await axiosInstance.post('/posts', {
+      let imageUrl = ''
+      if (imageFile) {
+        imageUrl = await uploadToCloudinary(imageFile, 'posts')
+      }
+
+      const res = await axiosInstance.post('/posts', {
         content,
-        image: image || ''
+        image: imageUrl
       })
+
       setContent('')
-      setImage(null)
+      setImageFile(null)
       setImagePreview(null)
       if (fileInputRef.current) fileInputRef.current.value = ''
-      onPostCreated()
+      onPostCreated(res.data.post)
     } catch (error) {
       const errorMsg = error.response?.data?.message || error.message || 'Post failed'
       console.error('Post error:', errorMsg)
-      console.error('Full error:', error)
       alert(errorMsg)
     } finally {
       setLoading(false)
     }
   }
 
-  const isDisabled = loading || (!content.trim() && !image)
+  const isDisabled = loading || (!content.trim() && !imageFile)
 
   return (
     <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-4">

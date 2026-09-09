@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import { Link } from 'react-router-dom'
 import useAuthStore from '../../store/authStore'
 import axiosInstance from '../../utils/axios'
 import CommentSection from './CommentSection'   // ← import
 
-function PostCard({ post, onUpdate }) {
+function PostCard({ post, onDelete }) {
   const { authUser } = useAuthStore()
   const [liked, setLiked] = useState(post.likes?.includes(authUser?._id))
   const [likeCount, setLikeCount] = useState(post.likes?.length || 0)
@@ -32,7 +32,7 @@ function PostCard({ post, onUpdate }) {
     if (!window.confirm('Delete this post?')) return
     try {
       await axiosInstance.delete(`/posts/${post._id}`)
-      onUpdate()
+      onDelete(post._id)
     } catch (error) {
       console.error('Delete error:', error.message)
     }
@@ -127,4 +127,4 @@ function PostCard({ post, onUpdate }) {
   )
 }
 
-export default PostCard
+export default memo(PostCard)

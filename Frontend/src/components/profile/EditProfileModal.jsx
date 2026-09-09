@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import axiosInstance from '../../utils/axios'
 import useAuthStore from '../../store/authStore'
+import { uploadToCloudinary } from '../../utils/uploadImage'
 
 function EditProfileModal({ profile, onClose, onUpdate }) {
   const { setAuthUser } = useAuthStore()
@@ -9,10 +10,9 @@ function EditProfileModal({ profile, onClose, onUpdate }) {
     bio: profile.bio || '',
     location: profile.location || '',
   })
-  const [profilePicture, setProfilePicture] = useState(null)
+  const [profilePictureFile, setProfilePictureFile] = useState(null)
   const [preview, setPreview] = useState(profile.profilePicture || '')
   const [loading, setLoading] = useState(false)
-  const [imageLoading, setImageLoading] = useState(false)
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -28,22 +28,21 @@ function EditProfileModal({ profile, onClose, onUpdate }) {
       return
     }
 
-    setImageLoading(true)
-    const reader = new FileReader()
-    reader.onloadend = () => {
-      setProfilePicture(reader.result)  // base64 string
-      setPreview(reader.result)
-      setImageLoading(false)
-    }
-    reader.readAsDataURL(file)
+    setProfilePictureFile(file)
+    setPreview(URL.createObjectURL(file))
   }
 
   const handleSubmit = async () => {
     setLoading(true)
     try {
+      let profilePicture = profile.profilePicture
+      if (profilePictureFile) {
+        profilePicture = await uploadToCloudinary(profilePictureFile, 'profiles')
+      }
+
       const res = await axiosInstance.put('/users/update/profile', {
         ...formData,
-        profilePicture: profilePicture || profile.profilePicture
+        profilePicture
       })
       setAuthUser(res.data)
       onUpdate()
@@ -80,9 +79,7 @@ function EditProfileModal({ profile, onClose, onUpdate }) {
 
             {/* Avatar Preview */}
             <div className="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 text-3xl font-semibold overflow-hidden">
-              {imageLoading ? (
-                <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-              ) : preview ? (
+              {preview ? (
                 <img
                   src={preview}
                   className="w-24 h-24 object-cover"
@@ -168,7 +165,7 @@ function EditProfileModal({ profile, onClose, onUpdate }) {
           </button>
           <button
             onClick={handleSubmit}
-            disabled={loading || imageLoading}
+            disabled={loading}
             className="flex-1 bg-blue-600 text-white text-sm py-2.5 rounded-full hover:bg-blue-700 disabled:opacity-50 transition flex items-center justify-center gap-2"
           >
             {loading ? (
