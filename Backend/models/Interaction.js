@@ -22,4 +22,7 @@ const interactionSchema = new mongoose.Schema({
     }
 }, { timestamps: true })
 
+interactionSchema.index({ user: 1, createdAt: -1 })
+interactionSchema.index({ targetType: 1, target: 1 })
+
 module.exports = mongoose.model('Interaction', interactionSchema)

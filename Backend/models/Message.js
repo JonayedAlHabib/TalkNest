@@ -30,6 +30,8 @@ const messageSchema = new mongoose.Schema({
     }
 }, { timestamps: true })
 
+messageSchema.index({ conversation: 1, createdAt: -1 })
+
 messageSchema.pre('validate', function (next) {
     if (!this.text && !this.image) {
         return next(new Error('Message must have text or image'))

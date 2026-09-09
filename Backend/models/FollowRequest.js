@@ -18,4 +18,7 @@ const followRequestSchema = new mongoose.Schema({
   }
 }, { timestamps: true })
 
+followRequestSchema.index({ receiver: 1, status: 1 })
+followRequestSchema.index({ sender: 1, receiver: 1 })
+
 module.exports = mongoose.model('FollowRequest', followRequestSchema)
