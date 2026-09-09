@@ -1,6 +1,5 @@
 const Message = require('../models/Message')
 const Conversation = require('../models/Conversation')
-const cloudinary = require('../config/cloudinary')
 const { getReceiverSocketId, getIO } = require('../socket/socket')
 
 // CREATE OR GET CONVERSATION
@@ -40,6 +39,7 @@ const getUserConversations = async (req, res) => {
         populate: { path: 'sender', select: 'username' }
       })
       .sort({ lastMessageTime: -1 })
+      .lean()
 
     res.json(conversations)
   } catch (error) {
@@ -61,6 +61,7 @@ const getConversationMessages = async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(parseInt(limit))
+      .lean()
 
     // Mark messages as read
     await Message.updateMany(
@@ -75,6 +76,8 @@ const getConversationMessages = async (req, res) => {
 }
 
 // SEND MESSAGE
+// `image`, when present, is already a Cloudinary URL uploaded directly from
+// the client (see /api/uploads/signature).
 const sendMessage = async (req, res) => {
   try {
     const { conversationId, receiverId, text, image } = req.body
@@ -83,20 +86,12 @@ const sendMessage = async (req, res) => {
       return res.status(400).json({ message: 'Message must have text or image' })
     }
 
-    let imageUrl = ''
-    if (image && image.startsWith('data:image')) {
-      const uploaded = await cloudinary.uploader.upload(image, {
-        folder: 'talknest/messages'
-      })
-      imageUrl = uploaded.secure_url
-    }
-
     const message = await Message.create({
       sender: req.user._id,
       receiver: receiverId,
       conversation: conversationId,
       text,
-      image: imageUrl
+      image: image || ''
     })
 
     await message.populate('sender', 'fullName username profilePicture')

@@ -97,6 +97,7 @@ const getUserInteractions = async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(parseInt(limit))
+      .lean()
 
     res.json(interactions)
   } catch (error) {
@@ -116,6 +117,7 @@ const getLikesStats = async (req, res) => {
     const Model = targetType === 'post' ? Post : Comment
     const target = await Model.findById(targetId)
       .populate('likes', 'fullName username profilePicture')
+      .lean()
 
     if (!target) {
       return res.status(404).json({ message: `${targetType} not found` })

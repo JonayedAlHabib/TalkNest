@@ -1,8 +1,9 @@
 const Post = require('../models/post')
-const cloudinary = require('../config/cloudinary')
 const User = require('../models/User')
 
 // Create post
+// `image`, when present, is already a Cloudinary URL — the client uploads
+// directly to Cloudinary (see /api/uploads/signature) and only sends us the link.
 const createPost = async (req, res) => {
   try {
     const { content, image } = req.body
@@ -11,17 +12,9 @@ const createPost = async (req, res) => {
       return res.status(400).json({ message: 'Content or image is required' })
     }
 
-    let imageUrl = ''
-    if (image && image.startsWith('data:image')) {
-      const uploaded = await cloudinary.uploader.upload(image, {
-        folder: 'talknest/posts'
-      })
-      imageUrl = uploaded.secure_url
-    }
-
     const post = await Post.create({
       content: content || '',
-      image: imageUrl,
+      image: image || '',
       author: req.user._id
     })
 
@@ -45,10 +38,10 @@ const getAllPost = async (req, res) => {
 
     const posts = await Post.find()
       .populate('author', 'fullName username profilePicture')
-      .populate('comments')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(parseInt(limit))
+      .lean()
 
     const total = await Post.countDocuments()
 
@@ -72,10 +65,10 @@ const getUserPosts = async (req, res) => {
 
     const posts = await Post.find({ author: userId })
       .populate('author', 'fullName username profilePicture')
-      .populate('comments')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(parseInt(limit))
+      .lean()
 
     res.json(posts)
   } catch (error) {
@@ -90,7 +83,7 @@ const getPost = async (req, res) => {
 
     const post = await Post.findById(postId)
       .populate('author', 'fullName username profilePicture')
-      .populate('comments')
+      .lean()
 
     if (!post) {
       return res.status(404).json({ message: 'Post not found' })
@@ -122,11 +115,8 @@ const editPost = async (req, res) => {
       post.content = content
     }
 
-    if (image && image.startsWith('data:image')) {
-      const uploaded = await cloudinary.uploader.upload(image, {
-        folder: 'talknest/posts'
-      })
-      post.image = uploaded.secure_url
+    if (image !== undefined) {
+      post.image = image
     }
 
     const updatedPost = await post.save()
@@ -223,6 +213,7 @@ const getPostLikes = async (req, res) => {
 
     const post = await Post.findById(postId)
       .populate('likes', 'fullName username profilePicture')
+      .lean()
 
     if (!post) {
       return res.status(404).json({ message: 'Post not found' })
@@ -240,20 +231,30 @@ const getPostLikes = async (req, res) => {
 // Get Feed
 const getFeed = async (req, res) => {
   try {
-    const currentUser = await User.findById(req.user._id)
+    const currentUser = await User.findById(req.user._id).select('following').lean()
     const feedUsers = [...currentUser.following, req.user._id]
 
     const { page = 1, limit = 10 } = req.query
     const skip = (page - 1) * limit
 
-    const posts = await Post.find({ author: { $in: feedUsers } })
-      .populate('author', 'fullName username profilePicture')
-      .populate('comments')
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(parseInt(limit))
+    const filter = { author: { $in: feedUsers } }
 
-    res.json(posts)
+    const [posts, total] = await Promise.all([
+      Post.find(filter)
+        .populate('author', 'fullName username profilePicture')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(parseInt(limit))
+        .lean(),
+      Post.countDocuments(filter)
+    ])
+
+    res.json({
+      total,
+      page: parseInt(page),
+      pages: Math.ceil(total / limit),
+      posts
+    })
   } catch (error) {
     res.status(500).json({ message: error.message })
   }

@@ -49,6 +49,7 @@ const getPostComments = async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(parseInt(limit))
+      .lean()
 
     const total = await Comment.countDocuments({ post: postId })
 

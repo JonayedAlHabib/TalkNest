@@ -75,7 +75,9 @@ const getPendingRequests = async (req, res) => {
     const requests = await FollowRequest.find({
       receiver: req.user._id,
       status: 'pending'
-    }).populate('sender', 'fullName username profilePicture')
+    })
+      .populate('sender', 'fullName username profilePicture')
+      .lean()
 
     res.json(requests)
   } catch (error) {
