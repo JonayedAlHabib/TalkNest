@@ -51,7 +51,7 @@ function RegisterPage() {
       <div className="bg-paper-raised w-full max-w-md rounded-2xl shadow-md p-8">
 
         {/* Logo */}
-        <h1 className="font-display italic text-3xl text-center text-ink mb-1">TalkNest</h1>
+        <img src="/TalkNest.jpg" alt="TalkNest" className="h-16 w-auto rounded-xl mx-auto mb-3" />
         <p className="text-center text-ink-dim text-sm mb-6">Create your account</p>
 
         {/* Error */}

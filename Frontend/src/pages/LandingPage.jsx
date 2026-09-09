@@ -6,7 +6,9 @@ function LandingPage() {
     <div className="landing-page">
       <nav className="nav">
         <div className="wrap">
-          <Link to="/" className="wordmark">TalkNest</Link>
+          <Link to="/" className="brand-mark">
+            <img src="/TalkNest.jpg" alt="TalkNest" />
+          </Link>
           <div className="nav-links">
             <Link to="/login" className="link-ghost">Log in</Link>
             <Link to="/register" className="btn btn-primary btn-sm">Join</Link>
@@ -157,7 +159,9 @@ function LandingPage() {
       <footer>
         <div className="wrap">
           <div className="foot-left">
-            <Link to="/" className="wordmark">TalkNest</Link>
+            <Link to="/" className="brand-mark brand-mark-sm">
+              <img src="/TalkNest.jpg" alt="TalkNest" />
+            </Link>
             <span className="foot-tagline">A social network you open on purpose.</span>
           </div>
           <div className="foot-links">

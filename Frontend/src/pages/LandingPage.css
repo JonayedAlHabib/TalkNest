@@ -69,13 +69,20 @@
   justify-content: space-between;
   height: 68px;
 }
-.landing-page .wordmark {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 500;
-  font-size: 1.35rem;
-  letter-spacing: 0.01em;
+.landing-page .brand-mark {
+  display: inline-flex;
   text-decoration: none;
+  line-height: 0;
+}
+.landing-page .brand-mark img {
+  height: 44px;
+  width: auto;
+  border-radius: 10px;
+  display: block;
+}
+.landing-page .brand-mark-sm img {
+  height: 34px;
+  border-radius: 8px;
 }
 .landing-page .nav-links {
   display: flex;
