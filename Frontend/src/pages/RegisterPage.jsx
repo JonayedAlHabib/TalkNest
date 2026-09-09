@@ -40,12 +40,19 @@ function RegisterPage() {
     }
 
     return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="bg-white w-full max-w-md rounded-2xl shadow-md p-8">
+    <div className="min-h-screen bg-paper flex items-center justify-center px-4 relative">
+      <Link
+        to="/"
+        className="absolute top-5 left-5 flex items-center gap-1.5 text-sm text-ink-dim hover:text-ink transition"
+      >
+        <span aria-hidden="true">←</span> Back
+      </Link>
+
+      <div className="bg-paper-raised w-full max-w-md rounded-2xl shadow-md p-8">
 
         {/* Logo */}
-        <h1 className="text-3xl font-bold text-center text-blue-600 mb-1">TalkNest</h1>
-        <p className="text-center text-gray-500 text-sm mb-6">Create your account</p>
+        <h1 className="font-display italic text-3xl text-center text-ink mb-1">TalkNest</h1>
+        <p className="text-center text-ink-dim text-sm mb-6">Create your account</p>
 
         {/* Error */}
         {error && (
@@ -61,7 +68,7 @@ function RegisterPage() {
             placeholder="Full Name"
             value={formData.fullName}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full border border-line-strong rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-400"
             required
           />
           <input
@@ -70,7 +77,7 @@ function RegisterPage() {
             placeholder="Username"
             value={formData.username}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full border border-line-strong rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-400"
             required
           />
           <input
@@ -79,7 +86,7 @@ function RegisterPage() {
             placeholder="Email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full border border-line-strong rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-400"
             required
           />
           <input
@@ -88,14 +95,14 @@ function RegisterPage() {
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full border border-line-strong rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-400"
             required
           />
           <select
             name="gender"
             value={formData.gender}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full border border-line-strong rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-400"
           >
             <option value="">Select Gender</option>
             <option value="male">Male</option>
@@ -107,21 +114,21 @@ function RegisterPage() {
             name="dateOfBirth"
             value={formData.dateOfBirth}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full border border-line-strong rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-400"
           />
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition disabled:opacity-50"
+            className="w-full bg-accent-600 text-accent-ink py-2 rounded-lg text-sm font-medium hover:bg-accent-700 transition disabled:opacity-50"
           >
             {loading ? 'Creating account...' : 'Register'}
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-500 mt-4">
+        <p className="text-center text-sm text-ink-dim mt-4">
           Already have an account?{' '}
-          <Link to="/login" className="text-blue-600 hover:underline">Login</Link>
+          <Link to="/login" className="text-accent-600 hover:underline">Login</Link>
         </p>
       </div>
     </div>

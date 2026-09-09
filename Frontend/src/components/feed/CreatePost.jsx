@@ -64,11 +64,11 @@ function CreatePost({ onPostCreated }) {
   const isDisabled = loading || (!content.trim() && !imageFile)
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-4">
+    <div className="bg-paper-raised border border-line rounded-2xl p-4 mb-4">
       <div className="flex gap-3">
 
         {/* Avatar */}
-        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-semibold text-sm flex-shrink-0 overflow-hidden">
+        <div className="w-10 h-10 rounded-full bg-accent-100 flex items-center justify-center text-accent-700 font-semibold text-sm flex-shrink-0 overflow-hidden">
           {authUser?.profilePicture
             ? <img src={authUser.profilePicture} className="w-10 h-10 object-cover" alt="" />
             : authUser?.fullName?.charAt(0).toUpperCase()
@@ -82,7 +82,7 @@ function CreatePost({ onPostCreated }) {
             onChange={(e) => setContent(e.target.value)}
             placeholder="What's on your mind?"
             rows={imagePreview ? 2 : 3}
-            className="w-full resize-none border-none outline-none text-sm text-gray-800 placeholder-gray-400 bg-transparent"
+            className="w-full resize-none border-none outline-none text-sm text-ink placeholder-ink-dim bg-transparent"
           />
 
           {/* Image Preview */}
@@ -103,13 +103,13 @@ function CreatePost({ onPostCreated }) {
           )}
 
           {/* Bottom bar */}
-          <div className="flex justify-between items-center mt-2 pt-2 border-t border-gray-100">
+          <div className="flex justify-between items-center mt-2 pt-2 border-t border-line">
 
             {/* Image upload button */}
             <div className="flex items-center gap-2">
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="flex items-center gap-1.5 text-gray-400 hover:text-blue-500 transition text-sm"
+                className="flex items-center gap-1.5 text-ink-dim hover:text-accent-600 transition text-sm"
               >
                 <span className="text-lg">🖼️</span>
                 <span className="text-xs">Photo</span>
@@ -127,18 +127,18 @@ function CreatePost({ onPostCreated }) {
             {/* Right side — char count + post button */}
             <div className="flex items-center gap-3">
               {content.length > 0 && (
-                <span className={`text-xs ${content.length > 450 ? 'text-red-500' : 'text-gray-300'}`}>
+                <span className={`text-xs ${content.length > 450 ? 'text-red-500' : 'text-ink-faint'}`}>
                   {content.length}/500
                 </span>
               )}
               <button
                 onClick={handleSubmit}
                 disabled={isDisabled}
-                className="bg-blue-600 text-white text-sm px-5 py-1.5 rounded-full hover:bg-blue-700 transition disabled:opacity-40 flex items-center gap-2"
+                className="bg-accent-600 text-accent-ink text-sm px-5 py-1.5 rounded-full hover:bg-accent-700 transition disabled:opacity-40 flex items-center gap-2"
               >
                 {loading ? (
                   <>
-                    <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <div className="w-3 h-3 border-2 border-accent-ink border-t-transparent rounded-full animate-spin" />
                     Posting...
                   </>
                 ) : 'Post'}

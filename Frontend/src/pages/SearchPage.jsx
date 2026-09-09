@@ -1,10 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import axiosInstance from '../utils/axios'
-import useAuthStore from '../store/authStore'
 
 function SearchPage() {
-  const { authUser } = useAuthStore()
   const [query, setQuery] = useState('')
   const [results, setResults] = useState([])
   const [loading, setLoading] = useState(false)
@@ -41,40 +39,40 @@ function SearchPage() {
     <div className="max-w-xl mx-auto px-4 pt-4 pb-24">
 
       {/* Search Input */}
-      <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3 mb-4 flex items-center gap-3">
-        <span className="text-gray-400">🔍</span>
+      <div className="bg-paper-raised border border-line rounded-2xl px-4 py-3 mb-4 flex items-center gap-3">
+        <span className="text-ink-dim">🔍</span>
         <input
           type="text"
           value={query}
           onChange={(e) => handleSearch(e.target.value)}
           placeholder="Search by name or username..."
-          className="flex-1 outline-none text-sm text-gray-800 placeholder-gray-400 bg-transparent"
+          className="flex-1 outline-none text-sm text-ink placeholder-ink-dim bg-transparent"
         />
         {query && (
-          <button onClick={() => handleSearch('')} className="text-gray-400 text-lg">×</button>
+          <button onClick={() => handleSearch('')} className="text-ink-dim text-lg">×</button>
         )}
       </div>
 
       {/* Loading */}
-      {loading && <p className="text-center text-gray-400 text-sm py-4">Searching...</p>}
+      {loading && <p className="text-center text-ink-dim text-sm py-4">Searching...</p>}
 
       {/* No results */}
       {!loading && query && results.length === 0 && (
-        <p className="text-center text-gray-400 text-sm py-8">No users found for "{query}"</p>
+        <p className="text-center text-ink-dim text-sm py-8">No users found for "{query}"</p>
       )}
 
       {/* Empty state */}
       {!query && (
-        <p className="text-center text-gray-400 text-sm py-8">Type a name to search users</p>
+        <p className="text-center text-ink-dim text-sm py-8">Type a name to search users</p>
       )}
 
       {/* Results */}
       {results.map((user, index) => (
-        <div key={user._id} className="bg-white border border-gray-200 rounded-2xl px-4 py-3 mb-2 flex items-center gap-3">
+        <div key={user._id} className="bg-paper-raised border border-line rounded-2xl px-4 py-3 mb-2 flex items-center gap-3">
 
           {/* Avatar */}
           <Link to={`/profile/${user.username}`}>
-            <div className="w-11 h-11 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-semibold">
+            <div className="w-11 h-11 rounded-full bg-accent-100 flex items-center justify-center text-accent-700 font-semibold">
               {user.profilePicture
                 ? <img src={user.profilePicture} className="w-11 h-11 rounded-full object-cover" alt="" />
                 : user.fullName?.charAt(0).toUpperCase()
@@ -84,8 +82,8 @@ function SearchPage() {
 
           {/* Info */}
           <Link to={`/profile/${user.username}`} className="flex-1">
-            <p className="text-sm font-medium text-gray-900">{user.fullName}</p>
-            <p className="text-xs text-gray-400">@{user.username}</p>
+            <p className="text-sm font-medium text-ink">{user.fullName}</p>
+            <p className="text-xs text-ink-dim">@{user.username}</p>
           </Link>
 
           {/* Follow Button */}
@@ -94,8 +92,8 @@ function SearchPage() {
             disabled={user.requested}
             className={`text-xs px-4 py-1.5 rounded-full transition
               ${user.requested
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : 'bg-blue-600 text-white hover:bg-blue-700'
+                ? 'bg-accent-200 text-ink cursor-not-allowed'
+                : 'bg-accent-600 text-accent-ink hover:bg-accent-700'
               }`}
           >
             {user.requested ? 'Requested' : 'Follow'}

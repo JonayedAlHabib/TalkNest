@@ -84,13 +84,13 @@ function ProfilePage() {
 
   if (loading) return (
     <div className="flex justify-center items-center min-h-screen">
-      <p className="text-gray-400">Loading...</p>
+      <p className="text-ink-dim">Loading...</p>
     </div>
   )
 
   if (!profile) return (
     <div className="flex justify-center items-center min-h-screen">
-      <p className="text-gray-400">User not found</p>
+      <p className="text-ink-dim">User not found</p>
     </div>
   )
 
@@ -98,47 +98,47 @@ function ProfilePage() {
     <div className="max-w-xl mx-auto px-4 pt-4 pb-24">
 
       {/* Profile Header */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-5 mb-4">
+      <div className="bg-paper-raised border border-line rounded-2xl p-5 mb-4">
 
         {/* Avatar + Name */}
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 text-2xl font-semibold overflow-hidden">
+          <div className="w-16 h-16 rounded-full bg-accent-100 flex items-center justify-center text-accent-700 text-2xl font-semibold overflow-hidden">
             {profile.profilePicture
               ? <img src={profile.profilePicture} className="w-16 h-16 object-cover" alt="" />
               : profile.fullName?.charAt(0).toUpperCase()
             }
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">{profile.fullName}</h2>
-            <p className="text-sm text-gray-400">@{profile.username}</p>
+            <h2 className="font-display text-lg text-ink">{profile.fullName}</h2>
+            <p className="text-sm text-ink-dim">@{profile.username}</p>
           </div>
         </div>
 
         {/* Bio & Location */}
         {profile.bio && (
-          <p className="text-sm text-gray-600 mb-1">{profile.bio}</p>
+          <p className="text-sm text-ink-dim mb-1">{profile.bio}</p>
         )}
         {profile.location && (
-          <p className="text-xs text-gray-400 mb-3">📍 {profile.location}</p>
+          <p className="text-xs text-ink-dim mb-3">📍 {profile.location}</p>
         )}
 
         {/* Stats */}
         <div className="flex gap-6 mb-4">
           <div className="text-center">
-            <p className="text-base font-semibold text-gray-900">{posts.length}</p>
-            <p className="text-xs text-gray-400">Posts</p>
+            <p className="text-base font-semibold text-ink">{posts.length}</p>
+            <p className="text-xs text-ink-dim">Posts</p>
           </div>
           <div className="text-center">
-            <p className="text-base font-semibold text-gray-900">
+            <p className="text-base font-semibold text-ink">
               {profile.followers?.length || 0}
             </p>
-            <p className="text-xs text-gray-400">Followers</p>
+            <p className="text-xs text-ink-dim">Followers</p>
           </div>
           <div className="text-center">
-            <p className="text-base font-semibold text-gray-900">
+            <p className="text-base font-semibold text-ink">
               {profile.following?.length || 0}
             </p>
-            <p className="text-xs text-gray-400">Following</p>
+            <p className="text-xs text-ink-dim">Following</p>
           </div>
         </div>
 
@@ -147,7 +147,7 @@ function ProfilePage() {
           <>
             <button
               onClick={() => setShowEditModal(true)}
-              className="w-full border border-gray-300 text-gray-700 text-sm py-2 rounded-full hover:bg-gray-50 transition"
+              className="w-full border border-line-strong text-ink text-sm py-2 rounded-full hover:bg-paper-inset transition"
             >
               Edit Profile
             </button>
@@ -167,10 +167,10 @@ function ProfilePage() {
               disabled={followLoading || followStatus === 'pending'}
               className={`flex-1 text-sm py-2 rounded-full transition
                 ${followStatus === 'following'
-                  ? 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                  ? 'border border-line-strong text-ink hover:bg-paper-inset'
                   : followStatus === 'pending'
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                    ? 'bg-accent-200 text-ink cursor-not-allowed'
+                    : 'bg-accent-600 text-accent-ink hover:bg-accent-700'
                 }`}
             >
               {followLoading ? '...'
@@ -182,7 +182,7 @@ function ProfilePage() {
 
             <button
               onClick={handleMessage}
-              className="flex-1 border border-gray-300 text-gray-700 text-sm py-2 rounded-full hover:bg-gray-50 transition"
+              className="flex-1 border border-line-strong text-ink text-sm py-2 rounded-full hover:bg-paper-inset transition"
             >
               Message
             </button>
@@ -191,9 +191,9 @@ function ProfilePage() {
       </div>
 
       {/* Posts */}
-      <h3 className="text-sm font-medium text-gray-500 mb-3">Posts</h3>
+      <h3 className="text-sm font-medium text-ink-dim mb-3">Posts</h3>
       {posts.length === 0 ? (
-        <p className="text-center text-gray-400 py-8 text-sm">No posts yet</p>
+        <p className="text-center text-ink-dim py-8 text-sm">No posts yet</p>
       ) : (
         posts.map(post => (
           <PostCard key={post._id} post={post} onDelete={handlePostDeleted} />

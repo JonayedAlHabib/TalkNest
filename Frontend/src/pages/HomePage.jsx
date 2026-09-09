@@ -48,9 +48,9 @@ function HomePage() {
 
       {/* Feed */}
       {loading ? (
-        <div className="text-center text-gray-400 py-10">Loading feed...</div>
+        <div className="text-center text-ink-dim py-10">Loading feed...</div>
       ) : posts.length === 0 ? (
-        <div className="text-center text-gray-400 py-10">
+        <div className="text-center text-ink-dim py-10">
           <p className="text-lg mb-2">No posts yet</p>
           <p className="text-sm">Follow some people to see their posts here</p>
         </div>
@@ -69,7 +69,7 @@ function HomePage() {
               <button
                 onClick={() => fetchFeed(page + 1)}
                 disabled={loadingMore}
-                className="text-sm text-blue-600 hover:text-blue-700 disabled:opacity-40"
+                className="text-sm text-accent-600 hover:text-accent-700 disabled:opacity-40"
               >
                 {loadingMore ? 'Loading...' : 'Load more'}
               </button>

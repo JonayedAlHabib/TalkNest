@@ -20,7 +20,7 @@ function Navbar() {
   ]
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
+    <nav className="fixed bottom-0 left-0 right-0 bg-paper-raised border-t border-line z-50">
       <div className="max-w-2xl mx-auto px-4 py-2 flex justify-around items-center">
 
         {links.map((link) => (
@@ -29,8 +29,8 @@ function Navbar() {
             to={link.path}
             className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg transition-colors
               ${location.pathname === link.path
-                ? 'text-blue-600'
-                : 'text-gray-400 hover:text-gray-700'
+                ? 'text-accent-600'
+                : 'text-ink-dim hover:text-ink'
               }`}
           >
             <span className="text-xl leading-none">{link.icon}</span>

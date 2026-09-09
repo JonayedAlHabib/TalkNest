@@ -31,11 +31,18 @@ function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="bg-white w-full max-w-md rounded-2xl shadow-md p-8">
+    <div className="min-h-screen bg-paper flex items-center justify-center px-4 relative">
+      <Link
+        to="/"
+        className="absolute top-5 left-5 flex items-center gap-1.5 text-sm text-ink-dim hover:text-ink transition"
+      >
+        <span aria-hidden="true">←</span> Back
+      </Link>
 
-        <h1 className="text-3xl font-bold text-center text-blue-600 mb-1">TalkNest</h1>
-        <p className="text-center text-gray-500 text-sm mb-6">Login to your account</p>
+      <div className="bg-paper-raised w-full max-w-md rounded-2xl shadow-md p-8">
+
+        <h1 className="font-display italic text-3xl text-center text-ink mb-1">TalkNest</h1>
+        <p className="text-center text-ink-dim text-sm mb-6">Login to your account</p>
 
         {error && (
           <div className="bg-red-100 text-red-600 text-sm px-4 py-2 rounded-lg mb-4">
@@ -50,7 +57,7 @@ function LoginPage() {
             placeholder="Email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full border border-line-strong rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-400"
             required
           />
           <input
@@ -59,22 +66,22 @@ function LoginPage() {
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full border border-line-strong rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-400"
             required
           />
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition disabled:opacity-50"
+            className="w-full bg-accent-600 text-accent-ink py-2 rounded-lg text-sm font-medium hover:bg-accent-700 transition disabled:opacity-50"
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-500 mt-4">
+        <p className="text-center text-sm text-ink-dim mt-4">
           Don't have an account?{' '}
-          <Link to="/register" className="text-blue-600 hover:underline">Register</Link>
+          <Link to="/register" className="text-accent-600 hover:underline">Register</Link>
         </p>
       </div>
     </div>

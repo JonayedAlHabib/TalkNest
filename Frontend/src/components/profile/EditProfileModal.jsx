@@ -60,14 +60,14 @@ function EditProfileModal({ profile, onClose, onUpdate }) {
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-white rounded-2xl p-6 w-full max-w-md">
+      <div className="bg-paper-raised rounded-2xl p-6 w-full max-w-md">
 
         {/* Header */}
         <div className="flex justify-between items-center mb-5">
-          <h3 className="text-base font-semibold text-gray-900">Edit Profile</h3>
+          <h3 className="font-display text-lg text-ink">Edit Profile</h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 text-2xl leading-none"
+            className="text-ink-dim hover:text-ink text-2xl leading-none"
           >
             ×
           </button>
@@ -78,7 +78,7 @@ function EditProfileModal({ profile, onClose, onUpdate }) {
           <label className="cursor-pointer relative group">
 
             {/* Avatar Preview */}
-            <div className="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 text-3xl font-semibold overflow-hidden">
+            <div className="w-24 h-24 rounded-full bg-accent-100 flex items-center justify-center text-accent-700 text-3xl font-semibold overflow-hidden">
               {preview ? (
                 <img
                   src={preview}
@@ -96,7 +96,7 @@ function EditProfileModal({ profile, onClose, onUpdate }) {
             </div>
 
             {/* Edit badge */}
-            <div className="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm border-2 border-white">
+            <div className="absolute bottom-0 right-0 bg-accent-600 text-accent-ink rounded-full w-7 h-7 flex items-center justify-center text-sm border-2 border-paper-raised">
               ✎
             </div>
 
@@ -107,25 +107,25 @@ function EditProfileModal({ profile, onClose, onUpdate }) {
               className="hidden"
             />
           </label>
-          <p className="text-xs text-gray-400 mt-2">Tap to change photo</p>
+          <p className="text-xs text-ink-dim mt-2">Tap to change photo</p>
         </div>
 
         {/* Form Fields */}
         <div className="space-y-3">
           <div>
-            <label className="text-xs font-medium text-gray-500 mb-1 block">
+            <label className="text-xs font-medium text-ink-dim mb-1 block">
               Full Name
             </label>
             <input
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-blue-400 transition"
+              className="w-full border border-line rounded-xl px-3 py-2.5 text-sm outline-none focus:border-accent-400 transition"
             />
           </div>
 
           <div>
-            <label className="text-xs font-medium text-gray-500 mb-1 block">
+            <label className="text-xs font-medium text-ink-dim mb-1 block">
               Bio
             </label>
             <textarea
@@ -134,15 +134,15 @@ function EditProfileModal({ profile, onClose, onUpdate }) {
               onChange={handleChange}
               rows={3}
               placeholder="Write something about yourself..."
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-blue-400 transition resize-none"
+              className="w-full border border-line rounded-xl px-3 py-2.5 text-sm outline-none focus:border-accent-400 transition resize-none"
             />
-            <p className="text-xs text-gray-300 text-right mt-0.5">
+            <p className="text-xs text-ink-faint text-right mt-0.5">
               {formData.bio.length}/150
             </p>
           </div>
 
           <div>
-            <label className="text-xs font-medium text-gray-500 mb-1 block">
+            <label className="text-xs font-medium text-ink-dim mb-1 block">
               Location
             </label>
             <input
@@ -150,7 +150,7 @@ function EditProfileModal({ profile, onClose, onUpdate }) {
               value={formData.location}
               onChange={handleChange}
               placeholder="Dhaka, Bangladesh"
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-blue-400 transition"
+              className="w-full border border-line rounded-xl px-3 py-2.5 text-sm outline-none focus:border-accent-400 transition"
             />
           </div>
         </div>
@@ -159,18 +159,18 @@ function EditProfileModal({ profile, onClose, onUpdate }) {
         <div className="flex gap-2 mt-5">
           <button
             onClick={onClose}
-            className="flex-1 border border-gray-200 text-gray-700 text-sm py-2.5 rounded-full hover:bg-gray-50 transition"
+            className="flex-1 border border-line text-ink text-sm py-2.5 rounded-full hover:bg-paper-inset transition"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="flex-1 bg-blue-600 text-white text-sm py-2.5 rounded-full hover:bg-blue-700 disabled:opacity-50 transition flex items-center justify-center gap-2"
+            className="flex-1 bg-accent-600 text-accent-ink text-sm py-2.5 rounded-full hover:bg-accent-700 disabled:opacity-50 transition flex items-center justify-center gap-2"
           >
             {loading ? (
               <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-accent-ink border-t-transparent rounded-full animate-spin" />
                 Saving...
               </>
             ) : 'Save Changes'}
