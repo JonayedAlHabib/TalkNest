@@ -21,7 +21,6 @@ function ProfilePage() {
 
   useEffect(() => {
     fetchProfile()
-    fetchUserPosts()
   }, [username])
 
   const fetchProfile = async () => {
@@ -30,6 +29,7 @@ function ProfilePage() {
       setProfile(res.data)
       const isFollowing = res.data.followers?.includes(authUser?._id)
       setFollowStatus(isFollowing ? 'following' : null)
+      fetchUserPosts(res.data._id)
     } catch (error) {
       console.error('Profile error:', error.message)
     } finally {
@@ -37,14 +37,17 @@ function ProfilePage() {
     }
   }
 
-  const fetchUserPosts = async () => {
+  const fetchUserPosts = async (userId) => {
     try {
-      const profileRes = await axiosInstance.get(`/users/${username}`)
-      const res = await axiosInstance.get(`/posts/user/${profileRes.data._id}`)
+      const res = await axiosInstance.get(`/posts/user/${userId}`)
       setPosts(res.data)
     } catch (error) {
       console.error('Posts error:', error.message)
     }
+  }
+
+  const handlePostDeleted = (postId) => {
+    setPosts(prev => prev.filter(p => p._id !== postId))
   }
 
   const handleFollow = async () => {
@@ -193,7 +196,7 @@ function ProfilePage() {
         <p className="text-center text-gray-400 py-8 text-sm">No posts yet</p>
       ) : (
         posts.map(post => (
-          <PostCard key={post._id} post={post} onUpdate={fetchUserPosts} />
+          <PostCard key={post._id} post={post} onDelete={handlePostDeleted} />
         ))
       )}
     </div>
