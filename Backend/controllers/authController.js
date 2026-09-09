@@ -35,8 +35,8 @@ const register = async (req, res)=>{
             username,
             email,
             password: hashedPassword,
-            gender,
-            dateOfBirth
+            ...(gender ? { gender } : {}),
+            ...(dateOfBirth ? { dateOfBirth } : {})
         })
 
         generateToken(user._id, res)
