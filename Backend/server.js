@@ -20,6 +20,7 @@ const postRoutes = require('./routes/postRoutes')
 const commentRoutes = require('./routes/commentRoutes')
 const interactionRoutes = require('./routes/interactionRoutes')
 const messageRoutes = require('./routes/messageRoutes')
+const uploadRoutes = require('./routes/uploadRoutes')
 
 connectDB().catch((err) => {
   console.error('Database initialization failed:', err.message)
@@ -44,8 +45,10 @@ const allowedOrigins = [
 initSocket(server, allowedOrigins)
 
 app.use(helmet())
-app.use(express.json({ limit: '10mb' }))
-app.use(express.urlencoded({ limit: '10mb', extended: true }))
+// Images now upload directly to Cloudinary from the browser, so request
+// bodies only ever carry text/JSON — no need for a large body limit.
+app.use(express.json({ limit: '1mb' }))
+app.use(express.urlencoded({ limit: '1mb', extended: true }))
 app.use(cookieParser())
 app.use(cors({
   origin: allowedOrigins,
@@ -64,7 +67,7 @@ app.use('/api/auth/register', authLimiter)
 
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 300,
+  max: 600,
   standardHeaders: true,
   legacyHeaders: false
 })
@@ -78,6 +81,7 @@ app.use('/api/posts', postRoutes)
 app.use('/api/comments', commentRoutes)
 app.use('/api/interactions', interactionRoutes)
 app.use('/api/messages', messageRoutes)
+app.use('/api/uploads', uploadRoutes)
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' })
